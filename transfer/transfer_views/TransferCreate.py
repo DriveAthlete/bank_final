@@ -31,7 +31,10 @@ class TransferCreateView(APIView):
         serializer = TransferSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        make_transaction(from_user=request.user, to_user=to_user, amount=request.data.get('amount'))
+        try:
+            make_transaction(from_user=request.user, to_user=to_user, amount=request.data.get('amount'))
+        except ValueError as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
         return Response(
                 status=HTTP_201_CREATED
             )
