@@ -6,10 +6,12 @@ from users.models import User
 class Transfer(models.Model):
     from_user = models.ForeignKey(
         User,
+        related_name='from_user',
         on_delete=models.CASCADE
     )
     to_user = models.ForeignKey(
         User,
+        related_name='to_user',
         on_delete=models.CASCADE
     )
     date = models.DateTimeField(auto_now_add=True)

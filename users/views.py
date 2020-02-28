@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from users.serializers import UserSerializer
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 
 # Create your views here.
@@ -11,6 +13,16 @@ class UserCreateView(generics.CreateAPIView):
     serializer_class = UserSerializer
     authentication_classes = ()
     permission_classes = ()
+
+
+class UserInformView(APIView):
+    serializer_class = UserSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        serializer = self.serializer_class(request.user)
+        return Response({'user_inf': serializer.data})
 
 
 class LoginView(APIView):
