@@ -1,5 +1,6 @@
 from users.models import User
 from django.db import transaction
+from currency.models import Currency
 
 
 def make_transaction(from_user: User, to_user: User, amount):
@@ -12,7 +13,12 @@ def make_transaction(from_user: User, to_user: User, amount):
         from_user.money = sender_balance
         from_user.save()
 
-        recipient_balance = to_user.money + float(amount)
+        sender_currency = from_user.currency
+        recipient_currency = to_user.currency
+        tr_amount = float(amount)/Currency.objects.get(currency=sender_currency).value
+        tr_amount = tr_amount * Currency.objects.get(currency=recipient_currency).value
+
+        recipient_balance = to_user.money + tr_amount
         to_user.money = recipient_balance
         to_user.save()
 

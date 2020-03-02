@@ -3,14 +3,22 @@ from django.db import models
 
 # Create your models here.
 class Currency(models.Model):
-    name = models.CharField(max_length=6)
-    rate = models.FloatField()
+    CURRENCY_TYPES = (
+        (1, 'EUR'),
+        (2, 'USD'),
+        (3, 'GPB'),
+        (4, 'RUB'),
+        (5, 'BTC'),
+    )
+
+    currency = models.IntegerField(verbose_name='Currency', choices=CURRENCY_TYPES)
+    value = models.FloatField(verbose_name='Value')
 
     def __str__(self):
-        return str(self.name) + ": " + str(self.rate)
+        return str(self.currency) + ": " + str(self.value)
 
     def get_rate(self):
         return {
-            'name': self.name,
-            'rate': self.rate
+            'name': self.currency,
+            'rate': self.value
         }

@@ -23,7 +23,7 @@ class User(AbstractBaseUser):
         (5, 'BTC'),
     )
     currency = models.IntegerField(verbose_name='Currency', choices=CURRENCY_TYPES)
-    money = models.IntegerField(verbose_name='Money')
+    money = models.FloatField(verbose_name='Money')
 
     objects = BaseUserManager()
 
