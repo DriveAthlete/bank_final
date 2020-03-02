@@ -28,6 +28,11 @@ class TransferCreateView(APIView):
                 {'error': 'Account "to_user" doesn\'t exist'},
                 status=HTTP_400_BAD_REQUEST
             )
+
+        try:
+            make_transaction(from_user=request.user, to_user=to_user, amount=request.data.get('amount'))
+        except ValueError as e:
+            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
         data = {
             'from_user': request.user.pk,
             'to_user': to_user.pk,
@@ -36,10 +41,7 @@ class TransferCreateView(APIView):
         serializer = TransferSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        try:
-            make_transaction(from_user=request.user, to_user=to_user, amount=request.data.get('amount'))
-        except ValueError as e:
-            return Response({'error': str(e)}, status=HTTP_400_BAD_REQUEST)
+
         return Response(
             status=HTTP_201_CREATED
         )
