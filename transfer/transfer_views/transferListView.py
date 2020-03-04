@@ -6,6 +6,10 @@ from django.db.models import Q
 from transfer.models import Transfer
 from transfer.transfer_serializers.list import TransferListSerializer
 
+"""
+Представление для показа списка всех транзакций
+"""
+
 
 class TransferListView(APIView):
     permission_classes = [IsAuthenticated]
@@ -15,5 +19,3 @@ class TransferListView(APIView):
         t_list = Transfer.objects.filter(Q(from_user=request.user) | Q(to_user=request.user))
         serializer = TransferListSerializer(t_list, many=True)
         return Response({"transfers": serializer.data})
-
-

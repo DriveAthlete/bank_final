@@ -2,6 +2,10 @@ from users.models import User
 from django.db import transaction
 from currency.models import Currency
 
+"""
+Метод для проведения транзакции 
+"""
+
 
 def make_transaction(from_user: User, to_user: User, amount):
     if from_user.money < float(amount):
@@ -15,7 +19,7 @@ def make_transaction(from_user: User, to_user: User, amount):
 
         sender_currency = from_user.currency
         recipient_currency = to_user.currency
-        tr_amount = float(amount)/Currency.objects.get(currency=sender_currency).value
+        tr_amount = float(amount) / Currency.objects.get(currency=sender_currency).value
         tr_amount = tr_amount * Currency.objects.get(currency=recipient_currency).value
 
         recipient_balance = to_user.money + tr_amount

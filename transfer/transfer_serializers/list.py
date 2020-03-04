@@ -2,6 +2,11 @@ from rest_framework import serializers
 from transfer.models import Transfer
 from users.serializers import UserSerializer
 
+"""
+Данный серилизатор нужнен для вывода списка транзакций для 
+конкретного пользователя
+"""
+
 
 class TransferListSerializer(serializers.ModelSerializer):
     from_user = UserSerializer()
