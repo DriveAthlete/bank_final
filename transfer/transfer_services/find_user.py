@@ -7,7 +7,9 @@ email
 
 
 def find_user(user_email):
-    user = User.objects.get(email=user_email)
-    if user is None:
+    try:
+        user = User.objects.get(email=user_email)
+    except:
         return None
+
     return user

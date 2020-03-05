@@ -4,6 +4,6 @@ from transfer.transfer_views.transferListView import TransferListView
 from transfer.transfer_views.TransferCreate import TransferCreateView
 
 urlpatterns = [
-    path('list/', TransferListView.as_view()),
+    path('list/', TransferListView.as_view(), name='transfer_list'),
     path('', TransferCreateView.as_view(), name='transfer_create')
 ]
