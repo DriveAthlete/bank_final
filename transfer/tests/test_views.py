@@ -6,7 +6,26 @@ from transfer.models import Transfer
 import json
 
 
-class TestViews(APITestCase):
+class TestListView(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.list_url = reverse('transfer_list')
+        self.user1 = User.objects.create(email='1@t.ru', currency='1', money='9999999')
+        self.user2 = User.objects.create(email='2@t.ru', currency='2', money='9999999')
+        self.transfer = Transfer.objects.create(from_user=self.user1, to_user=self.user2, amount=1.1)
+
+    def test_transfer_list_GET(self):
+        self.client.force_authenticate(user=self.user1)
+        response = self.client.get(self.list_url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_transfer_list_GET_user_is_not_auth(self):
+        response = self.client.get(self.list_url)
+        self.assertEquals(response.status_code, 401)
+
+
+class TestCreateViews(APITestCase):
 
     def setUp(self):
         User.objects.create(email='1@t.ru', currency='1', money='9999999')
@@ -17,17 +36,6 @@ class TestViews(APITestCase):
         self.client = APIClient()
         self.list_url = reverse('transfer_list')
         self.create_url = reverse('transfer_create')
-
-    def test_transfer_list_GET(self):
-        user = User.objects.get(email='1@t.ru')
-
-        self.client.force_authenticate(user=user)
-        response = self.client.get(self.list_url)
-        self.assertEquals(response.status_code, 200)
-
-    def test_transfer_list_GET_user_is_not_auth(self):
-        response = self.client.get(self.list_url)
-        self.assertEquals(response.status_code, 401)
 
     def test_transfer_create_POST_with_correct_data(self):
         user = User.objects.get(email='1@t.ru')

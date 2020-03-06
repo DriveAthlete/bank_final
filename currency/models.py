@@ -16,9 +16,3 @@ class Currency(models.Model):
 
     def __str__(self):
         return str(self.currency) + ": " + str(self.value)
-
-    def get_rate(self):
-        return {
-            'name': self.currency,
-            'rate': self.value
-        }
